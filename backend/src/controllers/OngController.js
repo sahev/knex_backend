@@ -34,6 +34,8 @@ module.exports = {
     async update(request, response) {
         
         //const { id } = request.params;
+        console.log(request.body);
+        
         const { id, name, email, whatsapp, city, uf } = request.body;
         const [count] = await connection('ongs').count().where('id', id);
     
