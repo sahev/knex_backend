@@ -1,0 +1,121 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+    th{ 
+        color:#fff;
+            }
+</style>
+
+<body>
+<table class="table table-striped">
+    <tr  class="bg-info">
+        <th>id</th>
+        <th>name</th>
+        <th>email</th>
+        <th>whatsapp</th>
+        <th>city</th>
+        <th>uf</th>
+        <th></th>
+    </tr>
+
+
+
+    <!-- <button id="btnGet" onclick="fetchData()">Get</button> -->
+
+    <tbody id="myTable">
+        
+
+
+    </tbody>
+
+</table>
+</body>
+
+    <button class="bg-info" onclick="location.href='/novo.html'" type="button">Novo Usuário</button>
+
+    <button class="bg-info" onclick="location.href='/index.html'" type="button">Voltar</button>
+
+<script>
+
+
+let url = 'http://localhost:3333/ongs'
+
+fetch(url).then((resp) => resp.json()).then(function(data) {
+    let pessoas = data;
+
+
+ return pessoas.map((pessoa) => {
+    
+     //console.log('user => ' + pessoa.id, pessoa.name, pessoa.email, pessoa.whatsapp, pessoa.city, pessoa.uf);
+
+    
+    var table = document.getElementById('myTable')
+
+
+    var row = `<tr>
+        <td id="inpID">${pessoa.id}</td>
+        <td><p id="inpName" contenteditable="true">${pessoa.name}</p></td>
+        <td><p id="inpEmail" contenteditable="true">${pessoa.email}</p></td>
+        <td><p id="inpWhatsapp" contenteditable="true" >${pessoa.whatsapp}</p></td>
+        <td><p id="inpCity" contenteditable="true" >${pessoa.city}</td>
+        <td><p id="inpUF" contenteditable="true" >${pessoa.uf}</td>
+        <td><img src="https://image.flaticon.com/icons/svg/901/901783.svg" alt="Apagar item" type=submit onclick="deletar('${url}', '${pessoa.id}')"></td>
+        <td><button onclick="atualizar('${url}', '${pessoa.id}')">atualizar</button></td>
+    </tr>`
+    
+    table.innerHTML += row
+
+
+})	
+   console.log('data => ' + data);
+
+})
+
+
+
+    function deletar(url, id) {
+    fetch(url + '/delete/' + id, {
+  method: 'DELETE',
+})
+.then(res => res.text()) 
+.then(res => console.log(res))
+}
+
+
+
+async function atualizar(url) {
+        
+        var data = JSON.stringify({
+
+            "id": document.getElementById('inpID').innerHTML,
+            "name": document.getElementById('inpName').innerHTML,
+            "email": document.getElementById('inpEmail').innerHTML,
+            "whatsapp": document.getElementById('inpWhatsapp').innerHTML,
+            "city": document.getElementById('inpCity').innerHTML,
+            "uf": document.getElementById('inpUF').innerHTML
+
+        });
+
+        console.log(data)
+
+        const res = await fetch(url + '/update', {
+            method: "post",
+            body: data,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        
+        if (res.ok) {
+            let resp = await res.json();
+         
+            console.log(resp);
+        } else {
+            console.log('erro: ' + res.status)
+        }
+
+    }
+
+</script>

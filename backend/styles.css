@@ -1,0 +1,23 @@
+body {
+    background: #f0f0f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 32px;
+    
+}
+
+.bg-info {
+    border-radius: 8px;
+    width: 82px;
+    height: 82px;
+    background-color: rgb(130, 192, 253);
+    margin-top: 15px;
+    cursor: pointer;
+    
+    transition: 400ms;
+}
+.bg-info:hover {
+    background-color: rgb(157, 185, 211);;
+}
