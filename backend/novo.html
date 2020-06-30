@@ -1,51 +1,64 @@
 <!DOCTYPE html>
+
 <head>
-     <title>Novo Usuario</title>
-      <link rel="stylesheet" href="novo.css">
+    <title>Novo Usuário</title>
+    <link rel="stylesheet" href="novo.css">
 
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <body>
 
-    <form id="frmForm">
+    <form id="frmForm" onsubmit="postData(); alert('Usuário cadastrado com sucesso!');">
         <label for="inpName">Name</label>
         <input id="inpName" type="text">
+
         <label for="inpEmail">Email</label>
-        <input id="inpEmail" type="email">
-        <label for="inpWhatsapp">Whatsapp</label>
-        <input id="inpWhatsapp" type="text">
+        <input id="inpEmail" type="email" required>
+
+        <label for="inpCpf">CPF</label>
+        <input id="inpCpf" type="text" required>
+
+        <label for="inpBirthdate">Birthdate</label>
+        <input id="inpBirthdate" type="text">
+
+        <label for="inpAddressline">Addressline</label>
+        <input id="inpAddressline" type="text">
+
         <label for="inpCity">City</label>
         <input id="inpCity" type="text">
+
         <label for="inpUF">UF</label>
         <input id="inpUF" type="text">
-        <button class="bg-info" id="btnPost" type="submit" onclick="postData(); location.href='/index.html'">Cadastrar</button>
-        <button class="bg-info" onclick="location.href='/index.html'" type="button">Voltar</button>
-    </form> 
-    
 
-    <!--<button id="btnPost" onclick="postData()">Post</button>-->
+        <button class="bg-info" id="btnPost" type="submit">Enviar</button>
+        <button class="bg-info" onclick="location.href='/listar.html'" type="button">Listar usuários</button>
+        <button class="bg-info" onclick="location.href='/index.html'" type="button">Voltar ao menu</button>
 
-</table>
+    </form>
+
+    </table>
 </body>
 <script>
 
-let url = 'http://localhost:3333/ongs'
+    let url = 'http://localhost:3333/cadastro'
 
-const frmForm = document.getElementById('btnPost')
+    const frmForm = document.getElementById('btnPost')
 
-frmForm.addEventListener("submit", postData, true)
+    frmForm.addEventListener("submit", postData, true)
 
-async  function postData() {
-        
+    async function postData() {
+
         var data = JSON.stringify({
 
             "name": document.getElementById('inpName').value,
             "email": document.getElementById('inpEmail').value,
-            "whatsapp": document.getElementById('inpWhatsapp').value,
+            "cpf": document.getElementById('inpCpf').value,
+            "birthdate": document.getElementById('inpBirthdate').value,
+            "addressline": document.getElementById('inpAddressline').value,
             "city": document.getElementById('inpCity').value,
             "uf": document.getElementById('inpUF').value
-            
+
         });
 
         console.log(data, url)
@@ -57,18 +70,18 @@ async  function postData() {
                 "Content-Type": "application/json"
             }
         })
-        
+
         if (res.ok) {
             let resp = await res.json();
-         
-            console.log(resp);
+
         } else {
-            console.log('erro: ' + res.status)
+
+            alert('erro: ' + res.status)
         }
 
-        
-        
-
     }
+
+
 </script>
+
 </html>

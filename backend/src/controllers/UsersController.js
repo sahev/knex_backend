@@ -4,7 +4,7 @@ const connection = require('../database/connection');
 
 module.exports = {
     async index (request, response) {
-    const ongs = await connection('ongs').select('*'); //selecionar todas as informações da tabela
+    const ongs = await connection('usuarios').select('*'); //selecionar todas as informações da tabela
 
 
     return response.json(ongs);
@@ -13,17 +13,19 @@ module.exports = {
     async create(request, response) {
         
 
-    const {name, email, whatsapp, city, uf } = request.body;
+    const { name, email, cpf, birthdate, addressline, city, uf } = request.body;
 
 
 
     const id = crypto.randomBytes(4).toString('HEX'); //Vai gerar 4b de caracteres aleatórios
 
-    await connection('ongs').insert({ //inserir informações na tabela
+    await connection('usuarios').insert({ //inserir informações na tabela
         id,
         name,
         email,
-        whatsapp,
+        cpf,
+        birthdate,
+        addressline,
         city,
         uf
     }); 
@@ -33,19 +35,22 @@ module.exports = {
 
     async update(request, response) {
         
-        //const { id } = request.params;
-        const { id, name, email, whatsapp, city, uf } = request.body;
-        const [count] = await connection('ongs').count().where('id', id);
+        
+        const { id, name, email, cpf, birthdate, addressline, city, uf } = request.body;
+
+        const [count] = await connection('usuarios').count().where('id', id);
     
         if (count['count(*)'] == '0') {
             return response.status(200).json({ success: 'Cadastro não encontrado!'})
         } 
        
-        await connection('ongs').update( //inserir informações na tabela
+        await connection('usuarios').update( //inserir informações na tabela
             {
                 'name': name,
                 'email': email,
-                'whatsapp': whatsapp,
+                'cpf': cpf,
+                'birthdate': birthdate,
+                'addressline': addressline,
                 'city': city,
                 'uf': uf
             }
@@ -59,9 +64,9 @@ module.exports = {
     async delete(request, response){
         
         const  {id} = request.params;
-        const [count] = await connection('ongs').count().where('id', id);
+        const [count] = await connection('usuarios').count().where('id', id);
 
-        const incident = await connection('ongs')
+        const incident = await connection('usuarios')
             .where('id', id)
             .select('name')
             .first();
@@ -73,7 +78,7 @@ module.exports = {
 
     
 
-        await connection('ongs').where('id', id).delete();    
+        await connection('usuarios').where('id', id).delete();    
 
         return response.status(200).json({ success: 'Cadastro deletado!'});
         
